@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\Http;
 class Ip2LocationProvider extends AbstractGeoIpProvider
 {
     /**
-     * Retrieve the country name from the provider response data.
+     * Retrieve the country name and ISO code from the provider response data.
      *
-     * The returned country value is used by GeoGuardMiddleware
-     * to determine whether the visitor's country is allowed or blocked.
-     *
-     * @param array $data The response data returned by the GeoIP provider.
-     * @return string The country name.
+     * @param array \$data The response data returned by the provider.
+     * @return array The country name and ISO code.
      */
-    public function country(array $data): string
+    public function country(array $data): array
     {
-        return $data['country_name'];
+        return [
+            'country_name' => $data['country_name'],
+            'country_code' => $data['country_code']
+        ];
     }
 
     /**

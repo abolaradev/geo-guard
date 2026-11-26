@@ -31,15 +31,12 @@ abstract class AbstractGeoIpProvider
     abstract protected function sendHttpRequest(): Response;
 
     /**
-     * Retrieve the country name from the provider response data.
+     * Retrieve the country name and ISO code from the provider response data.
      *
-     * The returned country value is used by GeoGuardMiddleware
-     * to determine whether the visitor's country is allowed or blocked.
-     *
-     * @param array $data The response data returned by the GeoIP provider.
-     * @return string The country name.
+     * @param array \$data The response data returned by the provider.
+     * @return array The country name and ISO code.
      */
-    abstract public function country(array $data): string;
+    abstract public function country(array $data): array;
 
     /**
      * Set the IP address to be used for GeoIP lookup.
