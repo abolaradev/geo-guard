@@ -16,8 +16,8 @@ class TwoIpProvider extends AbstractGeoIpProvider
     public function country(array $data): array
     {
         return [
-            'name' => $data['country'],
-            'code' => $data['code']
+            'country_name' => $data['country'],
+            'country_code' => $data['code']
         ];
     }
         
