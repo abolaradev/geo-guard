@@ -4,7 +4,9 @@ namespace Abolaradev\GeoGuard;
 
 use Abolaradev\GeoGuard\DTOs\GeoIpData;
 use Abolaradev\GeoGuard\Exceptions\GeoGuardInvalidGeoIpProviderException;
+use Abolaradev\GeoGuard\Models\GeoGuardIpBlackList;
 use Abolaradev\GeoGuard\Providers\LocalIpProvider;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
@@ -90,5 +92,15 @@ class GeoGuard
         return Arr::map($allowed_countries,function($item,$key){
             return $item->value;
         });
+    }
+
+    /**
+     * Get a query builder for the IP blacklist.
+     *
+     * @return Builder The query builder for the IP blacklist model.
+     */
+    public function blacklist(): Builder
+    {
+        return GeoGuardIpBlackList::query();
     }
 }
