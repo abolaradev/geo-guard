@@ -3,6 +3,7 @@
 namespace Abolaradev\GeoGuard;
 
 use Abolaradev\GeoGuard\DTOs\GeoIpData;
+use Abolaradev\GeoGuard\Exceptions\GeoGuardInvalidGeoIpProviderException;
 use Abolaradev\GeoGuard\Providers\LocalIpProvider;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -21,12 +22,19 @@ class GeoGuard
      * @param string $ip The IP address to look up.
      * @param string|null $provider The name of the GeoIP provider.
      * @return GeoIpData The cached or newly retrieved geolocation data.
+     * @throws GeoGuardInvalidGeoIpProviderException if the selected GeoIP provider is invalid.
      */
     public function lookup(string $ip, ?string $provider = null): GeoIpData
     {
+        $providers = config("geo-guard.providers");
+
         $selectedProvider = is_null($provider)
                     ? config('geo-guard.default')
                     : $provider;
+
+        if(!Arr::has($providers,$selectedProvider)){
+            throw new GeoGuardInvalidGeoIpProviderException($selectedProvider);
+        }
 
         $cache_key = sprintf(
             "%s(ip:%s|provider:%s)",
@@ -37,9 +45,9 @@ class GeoGuard
 
         $cache_ttl = config('geo-guard.cache.ttl');
 
-        return Cache::remember($cache_key, $cache_ttl, function() use($ip , $selectedProvider){
+        return Cache::remember($cache_key, $cache_ttl, function() use($ip,$providers,$selectedProvider){
 
-            $selectedProviderClass = config("geo-guard.providers.$selectedProvider.provider");
+            $selectedProviderClass = $providers[$selectedProvider]['provider'];
             $ip_details = app($selectedProviderClass)->setIp($ip)
                                                 ->setProvider($selectedProvider)
                                                 ->getIpDetails();
