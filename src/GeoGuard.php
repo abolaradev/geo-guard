@@ -4,6 +4,7 @@ namespace Abolaradev\GeoGuard;
 
 use Abolaradev\GeoGuard\DTOs\GeoIpData;
 use Abolaradev\GeoGuard\Providers\LocalIpProvider;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -67,5 +68,19 @@ class GeoGuard
         }
 
         return $ip;
+    }
+
+    /**
+     * Retrieve the ISO country codes of all allowed countries.
+     *
+     * @return array An array of allowed country codes.
+     */
+    public function allowedCountries(): array
+    {
+        $allowed_countries = config('geo-guard.allowed_countries');
+
+        return Arr::map($allowed_countries,function($item,$key){
+            return $item->value;
+        });
     }
 }
