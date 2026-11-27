@@ -2,7 +2,7 @@
 
 namespace Abolaradev\GeoGuard\Providers;
 
-use Abolaradev\GeoGuard\Exceptions\LocalIpException;
+use Abolaradev\GeoGuard\Exceptions\GeoGuardLocalIpException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
@@ -25,7 +25,7 @@ class LocalIpProvider
         $http = Http::get($url);
 
         if ($http->failed()) {
-            throw new LocalIpException(
+            throw new GeoGuardLocalIpException(
                 message: "HTTP request to [{$url}] failed to retrieve the public IP address.",
                 response: $http
             );

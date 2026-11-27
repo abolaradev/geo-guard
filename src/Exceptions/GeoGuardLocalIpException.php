@@ -7,7 +7,7 @@ use Illuminate\Http\Client\Response;
 /**
  * Exception thrown when retrieving the local IP address fails.
  */
-class LocalIpException extends AbstractGeoGuardException
+class GeoGuardLocalIpException extends AbstractGeoGuardException
 {
     /**
      * Create a new local IP exception.
